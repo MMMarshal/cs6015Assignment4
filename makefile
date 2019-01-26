@@ -14,7 +14,7 @@ cover:
 	xcrun llvm-cov show ./classifier -instr-profile=classifier.profdata
 
 test: main
-	./main
+	./test.sh
 
 clean:
 	rm -f ./main.o
