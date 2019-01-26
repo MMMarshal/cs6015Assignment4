@@ -1,2 +1,4 @@
-language: cpp
-compiler: clang++
+matrix:
+  language: cpp
+  install: make get-deps
+  compiler: clang++
