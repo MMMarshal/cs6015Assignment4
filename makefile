@@ -4,6 +4,7 @@ all: main
 main: main.cpp
 	clang++ -c main.cpp
 	clang++ -o main main.o
+	chmod +x ./test.sh
 
 cover:
 	clang++ -fprofile-instr-generate -fcoverage-mapping main.cpp -o classifier
@@ -13,7 +14,7 @@ cover:
 	xcrun llvm-cov show ./classifier -instr-profile=classifier.profdata
 
 test: main
-	bash ./test.sh
+	./main
 
 clean:
 	rm -f ./main.o
