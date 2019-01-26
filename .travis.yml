@@ -1,4 +1,5 @@
 language: cpp
+script: make && make test
 matrix:
   include:
     - os: osx
