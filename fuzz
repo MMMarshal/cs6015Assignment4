@@ -1,0 +1,65 @@
+
+retVal="OK"
+dir=(
+    BadPoints
+    RandomStrings
+    LegalRandomPoints
+    LegalRandomSquares
+    LegalRandomRectangles
+)
+
+for directory in "${dir[@]}";
+do
+  for file in ./coverage/$directory/*;
+  do
+    output=$(./main < $file)
+    error=$?
+    if [ $directory == BadPoints ]
+    then
+      if [ $error -ne 11 ]
+      then
+        echo " $file"
+        echo "$output"
+        retVal="ERROR"
+      fi
+    elif [ $directory == RandomStrings ]
+    then
+      if [ $error -ne 11 ]
+      then
+        echo " $file"
+        echo "$output"
+        retVal="ERROR"
+      fi
+    elif [ $directory == LegalRandomPoints ]
+    then
+      if [ $error -eq 11 ]
+      then
+        echo " $file"
+        echo "$output"
+        retVal="ERROR"
+      fi
+    elif [ $directory == LegalRandomSquares ]
+    then
+      if [ $output != square ]
+      then
+        echo " $file"
+        echo "$output"
+        retVal="ERROR"
+      fi
+    elif [ $directory == LegalRandomRectangles ]
+    then
+      if [ $output != rectangle ]
+      then
+        echo " $file"
+        echo "$output"
+        retVal="ERROR"
+      fi
+    else
+      echo "$file UNKNOWN ERROR"
+      retVal="ERROR"
+    fi
+  done
+done
+chmod +x ./cover.sh
+./cover.sh > coverage.txt
+echo $retVal
