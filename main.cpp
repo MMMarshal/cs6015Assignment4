@@ -218,12 +218,12 @@ int main(int argc, const char *argv[]) {
     getline(std::cin, line);
     if (containsIllegalChars(line)) {
       std::cout << "error 1";
-      exit(11);
+      exit(1);
     }
     std::vector<int> numbers = parseLinetoInts(line);
     if (isError1(numbers)) {
       std::cout << "error 1";
-      exit(11);
+      exit(1);
     }
     shape.x[0] = shape.y[0] = 0;
     for (int i = 0, j = 1; j < 4; i += 2, j++) {
@@ -233,15 +233,15 @@ int main(int argc, const char *argv[]) {
     }
     if (isError2(shape)) {
       std::cout << "error 2";
-      exit(12);
+      exit(2);
     }
     if (isError4(shape)) {
       std::cout << "error 4";
-      exit(14);
+      exit(4);
     }
     if (isError3(shape)) {
       std::cout << "error 3";
-      exit(13);
+      exit(3);
     }
     classifyQuadrilateral(shape);
   }
