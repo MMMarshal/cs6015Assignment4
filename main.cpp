@@ -81,6 +81,9 @@ bool isError2(cornerPoints &shape) {
 }
 
 // Returns true if any two line segments representing sides cross each other.
+// This is checking the orentationf of three points to determin if lines cross.
+// Lines only cross if (p1, q1, p2) and (p1, q1, q2) have different orientations
+// and (p2, q2, p1) and (p2, q2, q1) have different orientations.
 bool isError3(cornerPoints &shape) {
   for (int i = 0; i < 4; i++)
     assert((shape.x[i] > -1 && shape.x[i] < 101) &&
@@ -112,6 +115,8 @@ bool isError4(cornerPoints &shape) {
   for (int i = 0; i < 4; i++)
     assert((shape.x[i] > -1 && shape.x[i] < 101) &&
            (shape.y[i] > -1 && shape.y[i] < 101));
+  // Im creating of 2darray of all possible point combination.
+  // I then loop through the 2d array checking if points are collinear.
   int points[4][3];
   points[0][0] = points[2][2] = points[3][1] = 0;
   points[0][1] = points[1][0] = points[3][2] = 1;
@@ -155,14 +160,16 @@ void getSideSlopes(cornerPoints &shape) {
   shape.slope[3] = (shape.y[0] - shape.y[3]) / (shape.x[0] - shape.x[3]);
 }
 
-bool isSquare(const cornerPoints &shape) {
-  return shape.y[1] == shape.x[3] && shape.x[1] == shape.x[2] &&
-         shape.x[1] == shape.y[2] && shape.x[1] == shape.y[3];
+bool isSquare(cornerPoints &shape) {
+  getSideDistances(shape);
+  return (shape.y[1] == shape.x[3] && shape.x[1] == shape.x[2] &&
+          shape.x[1] == shape.y[2] && shape.x[1] == shape.y[3]) &&
+         (shape.y[1] == shape.x[3] == 0);
 }
 
 bool isRectangle(const cornerPoints &shape) {
   return shape.x[1] == shape.x[2] && shape.y[1] == shape.x[3] &&
-         shape.y[2] == shape.y[3];
+         shape.y[2] == shape.y[3] && (shape.y[1] == shape.x[3] == 0);
 }
 
 bool isParallelogram(cornerPoints &shape) {
@@ -171,7 +178,6 @@ bool isParallelogram(cornerPoints &shape) {
 }
 
 bool isRhombus(cornerPoints &shape) {
-  getSideDistances(shape);
   return isParallelogram(shape) && shape.length[0] == shape.length[1] &&
          shape.length[0] == shape.length[2] &&
          shape.length[0] == shape.length[3];
@@ -244,39 +250,41 @@ int main(int argc, const char *argv[]) {
 }
 
 /*
- // Used for developer testing within Xcode.
- std::ifstream myfile;
- myfile.open ("input.txt");
- std::string line;
- while (std::getline(myfile, line)){
- cornerPoints shape;
- std::cout << line << '\n';
- if (containsIllegalChars(line)){
- std::cout << "error 1";
- return 1;
- }
- std::vector<int> numbers = parseLinetoInts(line);
- if (isError1(numbers)){
- std::cout << "error 1";
- return 1;
- }
- shape.x[0] = shape.y[0] = 0;
- for ( int i = 0, j = 1; j < 4; i+=2, j++){
- shape.x[j] = numbers[i];
- shape.y[j] = numbers[i+1];
- }
- if (isError2(shape)){
- std::cout << "error 2";
- return 1;
- }
- if (isError4(shape)){
- std::cout << "error 4";
- return 1;
- }
- if (isError3(shape)){
- std::cout << "error 3";
- return 1;
- }
- classifyQuadrilateral(shape);
- }
- */
+// Used for developer testing within Xcode.
+std::ifstream myfile;
+myfile.open ("input.txt");
+std::string line;
+while (std::getline(myfile, line)){
+cornerPoints shape;
+std::cout << line << '\n';
+if (containsIllegalChars(line)){
+std::cout << "error 1";
+return 1;
+}
+std::vector<int> numbers = parseLinetoInts(line);
+if (isError1(numbers)){
+std::cout << "error 1";
+return 1;
+}
+shape.x[0] = shape.y[0] = 0;
+for ( int i = 0, j = 1; j < 4; i+=2, j++){
+shape.x[j] = numbers[i];
+shape.y[j] = numbers[i+1];
+}
+if (isError2(shape)){
+std::cout << "error 2";
+return 1;
+}
+if (isError4(shape)){
+std::cout << "error 4";
+return 1;
+}
+if (isError3(shape)){
+std::cout << "error 3";
+return 1;
+}
+classifyQuadrilateral(shape);
+}
+return 0;
+}
+*/
